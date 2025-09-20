@@ -13,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 @RestController
 @RequestMapping("/user")
-public class userController {
+public class UserController {
     @Autowired
     private IuserRepository userRepository;
 
 
     @PostMapping("/")
-    public ResponseEntity create(@RequestBody userModel userModel){
+    public ResponseEntity create(@RequestBody UserModel userModel){
         var user = this.userRepository.findByUsername(userModel.getUsername());
         if(user != null){
             //status code 400

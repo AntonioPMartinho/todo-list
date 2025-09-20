@@ -14,7 +14,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Data
 @Entity(name = "tb_user")
 
-public class userModel {
+public class UserModel {
    
     @Id
     @GeneratedValue

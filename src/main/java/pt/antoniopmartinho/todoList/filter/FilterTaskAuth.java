@@ -1,4 +1,4 @@
-package pt.antoniopmartinho.todoList.tasks;
+package pt.antoniopmartinho.todoList.filter;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class filterTaskAuth extends OncePerRequestFilter {
+public class FilterTaskAuth extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -24,8 +24,11 @@ public class filterTaskAuth extends OncePerRequestFilter {
        var userPass =  authorization.substring("Basic ".length()).trim();
 
        byte[] userPassDecoded = Base64.getDecoder().decode(userPass);
-
-       System.out.println("authorization");
-       System.out.println(userPass);
+       var userPassString = new String(userPassDecoded);
+    String[] credentials = userPassString.split(":");
+    String username = credentials[0];
+    String password = credentials[1];
+    System.out.println("username: " + username);
+    System.out.println("password: " + password);
     }
 }

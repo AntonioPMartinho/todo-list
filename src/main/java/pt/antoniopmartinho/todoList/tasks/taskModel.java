@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Data
 @Entity(name = "tb_task")
-public class taskModel {
+public class TaskModel {
     /*
      * ID
      * Title
