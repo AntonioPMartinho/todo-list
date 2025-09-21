@@ -1,4 +1,4 @@
-FROM eclipse-temurin:24-jdk AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
 
@@ -10,7 +10,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 
-FROM eclipse-temurin:24-jdk
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
