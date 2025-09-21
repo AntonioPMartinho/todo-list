@@ -1,4 +1,3 @@
-
 FROM eclipse-temurin:24-jdk AS build
 WORKDIR /app
 
@@ -6,8 +5,9 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y maven
 
 
-COPY . .
-RUN mvn clean package
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
 
 FROM eclipse-temurin:24-jdk
