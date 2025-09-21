@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
+
 import jakarta.servlet.http.HttpServletRequest;
 import pt.antoniopmartinho.todoList.utils.Utils;
 
@@ -24,7 +27,6 @@ public class TaskController {
 
     @PostMapping("/")
     public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request) {
-        System.out.println("Reached controller with user id " + request.getAttribute("idUser"));
         UUID idUser = (UUID) request.getAttribute("idUser");
         taskModel.setIdUser(idUser);
 
@@ -53,14 +55,23 @@ public class TaskController {
         return tasks; 
     }
     @PutMapping("/{id}")
-    public TaskModel updateTask(@RequestBody TaskModel taskModel, @PathVariable UUID id, HttpServletRequest request){
+    public ResponseEntity updateTask(@RequestBody TaskModel taskModel, @PathVariable UUID id, HttpServletRequest request){
         UUID idUser = (UUID) request.getAttribute("idUser");
-
         var task = this.taskRepository.findById(id).orElse(null);
+        //Checks if task exists
+        if(task == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not found");
+        }
+
+        //Check if the task belongs to the user
+        if(!task.getIdUser().equals(idUser)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You are not allowed to update this task");
+        }
         Utils.copyNonNullProperties(taskModel, task);
-        taskModel.setId(id);
-        taskModel.setIdUser((UUID)idUser);
-        return this.taskRepository.save(task);
+        task.setId(id);
+        task.setIdUser((UUID)idUser);
+        var updatedTask = this.taskRepository.save(task);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedTask);
     }
 }
 

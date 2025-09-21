@@ -25,9 +25,9 @@ public class FilterTaskAuth extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         var servletPath = request.getServletPath();
-        System.out.println("Servlet path: " + servletPath);
+
         if (servletPath.startsWith("/tasks/")) {
-            System.out.println("Chegou no filtro");
+
             var authorization = request.getHeader("Authorization");
             if (authorization == null || !authorization.startsWith("Basic ")) {
                 response.sendError(401);
@@ -43,8 +43,6 @@ public class FilterTaskAuth extends OncePerRequestFilter {
             }
             String username = credentials[0];
             String password = credentials[1];
-            System.out.println("username: " + username);
-            System.out.println("password: " + password);
             var user = this.userRepository.findByUsername(username);
             if (user == null) {
                 response.sendError(401);
