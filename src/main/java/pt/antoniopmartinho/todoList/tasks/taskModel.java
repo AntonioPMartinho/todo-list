@@ -34,13 +34,14 @@ public class TaskModel {
     @Column(length = 20, nullable = false)
     private String status;
     @Column(length = 20, nullable = false)
-    private String dueDate;
+    private LocalDateTime dueDate;
     @Column(length = 20, nullable = false)
     private String priority;
+    @Column(nullable = false)
+    private LocalDateTime startAt;
 
     @CreationTimestamp
     private LocalDateTime creationDate;
 
     private UUID idUser;
 }
-    
