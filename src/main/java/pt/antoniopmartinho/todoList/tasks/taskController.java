@@ -1,11 +1,14 @@
 package pt.antoniopmartinho.todoList.tasks;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,4 +44,20 @@ public class TaskController {
         TaskModel task = this.taskRepository.save(taskModel);
         return ResponseEntity.status(HttpStatus.OK).body(task);
     }
+
+    @RequestMapping("/")
+    public List<TaskModel> list(HttpServletRequest request){
+        UUID idUser = (UUID) request.getAttribute("idUser");
+        var tasks = this.taskRepository.findByIdUser((UUID)idUser);
+        return tasks; 
+    }
+    @PutMapping("/{id}")
+    public TaskModel updateTask(@RequestBody TaskModel taskModel, @PathVariable UUID id, HttpServletRequest request){
+        UUID idUser = (UUID) request.getAttribute("idUser");
+        System.out.println(idUser);
+        taskModel.setId(id);
+        taskModel.setIdUser((UUID)idUser);
+        return this.taskRepository.save(taskModel);
+    }
 }
+

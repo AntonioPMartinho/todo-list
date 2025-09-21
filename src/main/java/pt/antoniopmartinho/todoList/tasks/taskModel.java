@@ -27,17 +27,17 @@ public class TaskModel {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
-    @Column(length = 50, nullable = false)
+    @Column(length = 50)
     private String title;
-    @Column(length = 255, nullable = false)
+    @Column(length = 255)
     private String description;
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private String status;
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private LocalDateTime dueDate;
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private String priority;
-    @Column(nullable = false)
+    @Column
     private LocalDateTime startAt;
 
     @CreationTimestamp
